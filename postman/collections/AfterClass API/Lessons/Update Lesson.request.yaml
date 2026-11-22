@@ -1,0 +1,37 @@
+$kind: http-request
+name: 'Update Lesson'
+method: PUT
+url: '{{baseUrl}}/lessons/{{lessonId}}'
+order: 3000
+description: |-
+  Partially updates a lesson by its MongoDB ObjectId.
+
+  **Path parameter:**
+  - `lessonId` — MongoDB ObjectId of the lesson to update (uses the
+    `lessonId` collection variable set by *Get All Lessons*)
+
+  **Allowed body fields (at least one required):**
+  - `topic` (string)
+  - `location` (string)
+  - `price` (number ≥ 0)
+  - `space` (non-negative integer)
+  - `icon` (string)
+  - `image` (string — filename)
+  - `teachers` (array of `{ firstName, lastName }`)
+
+  Returns the updated lesson document on success (`200`).
+  Returns `400` if no valid field is provided or a value fails validation.
+  Returns `404` if the lesson is not found.
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "space": 4
+    }
+pathVariables:
+  - key: lessonId
+    value: '{{lessonId}}'
+    description: 'MongoDB ObjectId of the lesson to update'

@@ -1,0 +1,39 @@
+$kind: http-request
+name: 'Submit Order'
+method: POST
+url: '{{baseUrl}}/orders'
+order: 1000
+description: |-
+  Creates a new enrolment order for one or more lessons.
+
+  **Validation rules:**
+  - `name` — letters and spaces only (required)
+  - `phone` — digits only (required)
+  - `lessonIDs` — non-empty array; each item must have:
+    - `lessonID` (string — MongoDB ObjectId of the lesson)
+    - `numberOfSpace` (positive integer)
+  - `numberOfSpace` — optional top-level total; defaults to the sum of all
+    `lessonIDs[].numberOfSpace` values
+
+  **Response `201`:**
+  ```json
+  { "message": "Order submitted", "orderId": "<insertedId>" }
+  ```
+  Returns `400` with a descriptive `error` message on validation failure.
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Alex Morgan",
+      "phone": "07123456789",
+      "lessonIDs": [
+        {
+          "lessonID": "{{lessonId}}",
+          "numberOfSpace": 1
+        }
+      ],
+      "numberOfSpace": 1
+    }

@@ -1,0 +1,22 @@
+$kind: http-request
+name: 'Get Lesson Enrolment Count'
+method: GET
+url: '{{baseUrl}}/enrolment/{{lessonId}}'
+order: 1000
+description: |-
+  Returns the total number of spaces booked for a specific lesson across all
+  submitted orders.
+
+  **Path parameter:**
+  - `lessonId` — MongoDB ObjectId of the lesson (uses the `lessonId`
+    collection variable set by *Get All Lessons*)
+
+  **Response:**
+  ```json
+  { "lessonID": "<id>", "enrolment": 3 }
+  ```
+  Returns `404` if the lesson does not exist.
+pathVariables:
+  - key: lessonid
+    value: '{{lessonId}}'
+    description: 'MongoDB ObjectId of the lesson'

@@ -1,0 +1,13 @@
+$kind: http-request
+name: 'Get All Teachers'
+method: GET
+url: '{{baseUrl}}/teachers'
+order: 1000
+description: |-
+  Returns a deduplicated list of all teachers derived from the lessons
+  collection, sorted by last name then first name.
+
+  **Response:** Array of objects:
+  - `firstName` (string)
+  - `lastName` (string)
+  - `lessonCount` (number) — how many lessons this teacher is assigned to

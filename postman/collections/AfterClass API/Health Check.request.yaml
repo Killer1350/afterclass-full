@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Health Check'
+method: GET
+url: '{{baseUrl}}/health'
+order: 1000
+description: |-
+  Returns `{ "status": "ok" }` when the server and database connection are healthy.
+  Use this to verify the API is reachable before running other requests.

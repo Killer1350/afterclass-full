@@ -1,0 +1,18 @@
+$kind: collection
+name: AfterClass API
+description: |-
+  REST API for the AfterClass after-school activities platform (CST3144).
+  Built with Express and MongoDB.
+
+  **Base URL:** set the `baseUrl` collection variable to your local server
+  (`http://localhost:3000`) or the deployed Render URL.
+
+  Routes are available both at the root path (e.g. `GET /lessons`) and under
+  the `/api` prefix (e.g. `GET /api/lessons`).
+variables:
+  - key: baseUrl
+    value: 'http://localhost:3000'
+    description: 'Root URL of the AfterClass Express server (no trailing slash)'
+  - key: lessonId
+    value: ''
+    description: 'MongoDB ObjectId of a lesson — populated automatically by the Get All Lessons test script'

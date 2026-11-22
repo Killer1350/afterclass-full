@@ -1,0 +1,22 @@
+$kind: http-request
+name: 'Get Lessons by Teacher'
+method: GET
+url: '{{baseUrl}}/teachers/Amira/Khan/lessons'
+order: 2000
+description: |-
+  Returns all lessons assigned to a specific teacher identified by first and
+  last name.
+
+  **Path parameters:**
+  - `firstName` — teacher's first name (case-sensitive)
+  - `lastName` — teacher's last name (case-sensitive)
+
+  **Response:** Array of lesson objects taught by the specified teacher.
+  Returns an empty array if no lessons are found for that teacher.
+pathVariables:
+  - key: firstName
+    value: Amira
+    description: "Teacher's first name (case-sensitive)"
+  - key: lastName
+    value: Khan
+    description: "Teacher's last name (case-sensitive)"

@@ -1,0 +1,29 @@
+$kind: http-request
+name: 'Search Lessons'
+method: GET
+url: '{{baseUrl}}/search?q=art'
+order: 2000
+description: |-
+  Server-side search across lessons. Filters by a free-text query and/or
+  teacher name.
+
+  **Query parameters (all optional):**
+  - `q` — free-text search matched case-insensitively against `topic`,
+    `location`, `price`, and `space`
+  - `teacherFirstName` — filter by teacher first name (exact match)
+  - `teacherLastName` — filter by teacher last name (exact match, only
+    applied when `teacherFirstName` is also provided)
+
+  Returns the filtered array of lesson objects.
+queryParams:
+  - key: q
+    value: art
+    description: 'Free-text search term (topic, location, price, space)'
+  - key: teacherFirstName
+    value: ''
+    description: 'Filter by teacher first name (exact, optional)'
+    disabled: true
+  - key: teacherLastName
+    value: ''
+    description: 'Filter by teacher last name (exact, optional)'
+    disabled: true

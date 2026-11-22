@@ -1,0 +1,19 @@
+$kind: http-request
+name: 'Get Missing Image (404)'
+method: GET
+url: '{{baseUrl}}/images/does-not-exist.svg'
+order: 2000
+description: |-
+  Demonstrates the JSON 404 response returned when a requested image file
+  does not exist in `public/images/`.
+
+  **Response `404`:**
+  ```json
+  { "error": "Image not found: does-not-exist.svg" }
+  ```
+  Useful for verifying that missing static assets return a structured error
+  rather than an HTML page.
+pathVariables:
+  - key: filename
+    value: does-not-exist.svg
+    description: 'A filename that does not exist — triggers the 404 handler'

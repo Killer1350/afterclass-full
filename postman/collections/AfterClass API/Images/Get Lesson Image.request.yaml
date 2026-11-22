@@ -1,0 +1,19 @@
+$kind: http-request
+name: 'Get Lesson Image'
+method: GET
+url: '{{baseUrl}}/images/coding.svg'
+order: 1000
+description: |-
+  Serves a lesson illustration SVG from the server's `public/images/` directory.
+
+  **Path parameter:**
+  - `filename` — name of the image file (e.g. `coding.svg`, `dance.svg`,
+    `football.svg`, `pottery.svg`, `guitar.svg`, `science.svg`,
+    `basketball.svg`, `art.svg`, `chess.svg`, `cooking.svg`)
+
+  Returns the SVG file with `Content-Type: image/svg+xml` on success (`200`).
+  Returns a JSON `404` error if the file does not exist.
+pathVariables:
+  - key: filename
+    value: coding.svg
+    description: 'Image filename from public/images/ (e.g. coding.svg)'

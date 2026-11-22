@@ -1,0 +1,32 @@
+$kind: http-request
+name: 'Get All Lessons'
+method: GET
+url: '{{baseUrl}}/lessons'
+order: 1000
+description: |-
+  Returns all lessons sorted alphabetically by topic.
+
+  **Response:** Array of lesson objects, each containing:
+  - `_id` — MongoDB ObjectId
+  - `topic` — lesson name
+  - `location` — venue
+  - `price` — cost per session (number)
+  - `space` — available spaces remaining (integer)
+  - `icon` — emoji icon
+  - `image` — filename of the lesson illustration (e.g. `coding.svg`)
+  - `teachers` — array of `{ firstName, lastName }` objects
+
+  The test script automatically saves the first lesson's `_id` into the
+  `lessonId` collection variable for use in subsequent requests.
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status is 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const lessons = pm.response.json();
+      if (Array.isArray(lessons) && lessons.length && lessons[0]._id) {
+        pm.collectionVariables.set('lessonId', lessons[0]._id);
+        console.log('Saved lessonId:', lessons[0]._id);
+      }
