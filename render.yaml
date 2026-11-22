@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: afterclass-api
+    runtime: node
+    rootDir: express-app
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_NAME
+        value: afterclass
+      - key: MONGODB_URI
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false

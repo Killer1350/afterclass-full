@@ -42,7 +42,28 @@ The same routes are also available under `/api`, for example `/api/lessons`.
 
 ### Express API on Render
 
-Create a web service from the `express-app` directory. Use build command `npm install` and start command `npm start`. Add `MONGODB_URI`, `DB_NAME`, `CLIENT_ORIGIN`, and `NODE_ENV=production` as Render environment variables. Set `CLIENT_ORIGIN` to the exact published GitHub Pages origin. Do not paste Atlas credentials into source code or public files. Use a Render service name/URL that includes your student number as required in the coursework.
+The root `render.yaml` is a Render Blueprint for this project's current combined repository. It sets `express-app` as the service root, uses `npm install` and `npm start`, and checks `/health`. Render's Blueprint format supports a root directory for monorepos and prompts for values marked `sync: false`.
+
+1. Push this repository to GitHub and open Render's Dashboard.
+2. Choose **New + > Blueprint** and connect the repository containing `render.yaml`.
+3. Supply `MONGODB_URI` and `CLIENT_ORIGIN` when prompted. Use your MongoDB Atlas connection string for the former; do not commit it to Git.
+4. If the coursework brief requires your student number in the Render service name or URL, edit `name` in `render.yaml` before creating the Blueprint.
+5. After Render deploys, open `https://YOUR-SERVICE.onrender.com/health`. A healthy API responds with `{"status":"ok"}`.
+
+If the backend is deployed from its own repository rather than this combined project, use that backend repository's root as the service root and omit `rootDir: express-app` from its Blueprint. Set `CLIENT_ORIGIN` to the exact published GitHub Pages origin. The browser frontend must use the deployed HTTPS API URL in `API_BASE_URL`.
+
+### Connect the API to Postman
+
+The collection is `postman/AfterClass.postman_collection.json`.
+
+1. In Postman, select **Import**, choose **Files**, and open `AfterClass.postman_collection.json`.
+2. Open the imported collection's **Variables** tab. Set `baseUrl` to `http://localhost:3000` for a local server, or to the HTTPS Render URL after deployment. Do not add a trailing slash.
+3. Start the Express API locally with `npm start`, or make sure the Render service is live.
+4. Send **Get all lessons** first. Its test script saves the first lesson's MongoDB `_id` as the collection variable `lessonId`.
+5. Send **Existing image** to demonstrate a successful image response (200), then **Missing image (expect JSON 404)** to demonstrate the error response (404 with an `error` field). The collection includes tests for both outcomes.
+6. Try the other GET requests. **Submit order** writes a new order to MongoDB, and **Update lesson spaces** changes a lesson's available-space value, so use test data when demonstrating those two requests.
+
+The image middleware serves existing files from `express-app/public/images`. If a file is missing, the request falls through to the explicit `/images/:filename` handler, which returns a JSON 404 message. The Postman collection has requests for both cases.
 
 ### Vue app on GitHub Pages
 

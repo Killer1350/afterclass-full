@@ -4,17 +4,152 @@
     "description": "CST3144 Express/MongoDB routes. Set baseUrl to the local API or deployed Render URL.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [{ "key": "baseUrl", "value": "http://localhost:3000" }, { "key": "lessonId", "value": "REPLACE_WITH_LESSON_OBJECT_ID" }],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "lessonId",
+      "value": ""
+    }
+  ],
   "item": [
-    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/health" } },
-    { "name": "Get all lessons", "request": { "method": "GET", "url": "{{baseUrl}}/lessons" } },
-    { "name": "Search lessons (server side)", "request": { "method": "GET", "url": "{{baseUrl}}/search?q=art" } },
-    { "name": "Get teachers", "request": { "method": "GET", "url": "{{baseUrl}}/teachers" } },
-    { "name": "Lessons by teacher", "request": { "method": "GET", "url": "{{baseUrl}}/teachers/Amira/Khan/lessons" } },
-    { "name": "Lesson enrolment count", "request": { "method": "GET", "url": "{{baseUrl}}/enrolment/{{lessonId}}" } },
-    { "name": "Submit order", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Alex Morgan\",\n  \"phone\": \"07123456789\",\n  \"lessonIDs\": [{ \"lessonID\": \"{{lessonId}}\", \"numberOfSpace\": 1 }],\n  \"numberOfSpace\": 1\n}" }, "url": "{{baseUrl}}/orders" } },
-    { "name": "Update lesson spaces", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"space\": 4\n}" }, "url": "{{baseUrl}}/lessons/{{lessonId}}" } },
-    { "name": "Existing image", "request": { "method": "GET", "url": "{{baseUrl}}/images/coding.svg" } },
-    { "name": "Missing image (expect JSON 404)", "request": { "method": "GET", "url": "{{baseUrl}}/images/does-not-exist.svg" } }
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Get all lessons",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/lessons"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Lessons request succeeds', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "const lessons = pm.response.json();",
+              "if (Array.isArray(lessons) && lessons.length && lessons[0]._id) {",
+              "  pm.collectionVariables.set('lessonId', lessons[0]._id);",
+              "  console.log('Saved first lesson ID for later requests:', lessons[0]._id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search lessons (server side)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/search?q=art"
+      }
+    },
+    {
+      "name": "Get teachers",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/teachers"
+      }
+    },
+    {
+      "name": "Lessons by teacher",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/teachers/Amira/Khan/lessons"
+      }
+    },
+    {
+      "name": "Lesson enrolment count",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/enrolment/{{lessonId}}"
+      }
+    },
+    {
+      "name": "Submit order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alex Morgan\",\n  \"phone\": \"07123456789\",\n  \"lessonIDs\": [{ \"lessonID\": \"{{lessonId}}\", \"numberOfSpace\": 1 }],\n  \"numberOfSpace\": 1\n}"
+        },
+        "url": "{{baseUrl}}/orders"
+      }
+    },
+    {
+      "name": "Update lesson spaces",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"space\": 4\n}"
+        },
+        "url": "{{baseUrl}}/lessons/{{lessonId}}"
+      }
+    },
+    {
+      "name": "Existing image",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/images/coding.svg"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Existing lesson image is returned', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.headers.get('Content-Type')).to.include('image/svg+xml');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Missing image (expect JSON 404)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/images/does-not-exist.svg"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Missing image returns a clear JSON 404', function () {",
+              "  pm.response.to.have.status(404);",
+              "  pm.expect(pm.response.json()).to.have.property('error');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
   ]
 }

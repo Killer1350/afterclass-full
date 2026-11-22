@@ -26,6 +26,8 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.json({ limit: '1mb' }));
+// Serve lesson illustrations from public/images. Missing files fall through to
+// the JSON 404 handler below so they are easy to demonstrate in Postman.
 app.use('/images', express.static(path.join(__dirname, 'public', 'images'), { fallthrough: true }));
 app.use('/api', (req, res, next) => { req.url = req.url; next(); });
 const api = express.Router();
@@ -107,6 +109,7 @@ api.put('/lessons/:id', async (req, res, next) => {
 app.use('/api', api);
 // Also expose the coursework-required routes at root, e.g. GET /lessons.
 app.use('/', api);
+// express.static serves existing files; this route explains missing images.
 app.get('/images/:filename', (req, res) => {
   const filename = path.basename(req.params.filename);
   const file = path.join(__dirname, 'public', 'images', filename);
